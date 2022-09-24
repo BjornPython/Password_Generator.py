@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 import pandas
 import random
 import string
@@ -34,19 +35,28 @@ def save():
     web = str(website_input.get())  # Gets the value inputted in the website_input
     email = str(email_input.get())  # Gets the value inputted in the email_input
     pword = str(password_input.get())  # Gets the value inputted in the password_input
-    INFO = [
-        {
-            "WEBSITE": web,
-            "EMAIL": email,
-            "PASSWORD": pword
-        }
-    ]
-    pass_file = pandas.DataFrame(INFO)
-    pass_file.to_csv(FILE, mode="a", index=False, header=False)  # Appends the INFO to the FILE
-    website_input.delete(0, END)
-    password_input.delete(0, END)
-    saved_label.config(text=f"Information has been successfully\nsaved to {FILE}")  # Edits the text in saved_label.
-    ok_button.place(x=120, y=550)  # shows the ok button.
+    none = ""
+    if len(web) == 0 or len(email) == 0 or len(pword) == 0:
+        messagebox.showinfo(title="OOPS", message="Please make sure all fields are not empty")
+    else:
+        
+        Info = [
+            {
+                "WEBSITE": web,
+                "EMAIL": email,
+                "PASSWORD": pword
+            }
+        ]
+        # only continue if user inputs yes in popup message.
+        if messagebox.askokcancel(title="SAVE", message=f"Do you want to save?\n"
+                                                        f"WEBSITE: {web}\nEMAIL: {email}\nPASSWORD: {pword}"):
+            pass_file = pandas.DataFrame(Info)
+            pass_file.to_csv(FILE, mode="a", index=False, header=False)  # Appends the Info to the FILE
+            website_input.delete(0, END)
+            password_input.delete(0, END)
+            saved_label.config(
+                text=f"Information has been successfully\nsaved to {FILE}")  # Edits the text in saved_label.
+            ok_button.place(x=120, y=550)  # shows the ok button.
 
 
 def ok():
